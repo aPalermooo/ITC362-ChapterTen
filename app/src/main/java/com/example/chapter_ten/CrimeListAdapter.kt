@@ -29,27 +29,41 @@ class IntenseCrimeHolder ( private val binding : ListItemIntenseCrimeBinding ) :
     }
 }
 
-class CrimeListAdapter ( private  val crimes : List<Crime> ) : RecyclerView.Adapter<CrimeHolder>() {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
+class CrimeListAdapter ( private  val crimes : List<Crime> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val binding = ListItemCrimeBinding.inflate(inflater, parent, false)
-        return CrimeHolder(binding)
+        if (viewType == 1) {
+            val binding = ListItemIntenseCrimeBinding.inflate(inflater, parent, false)
+            return IntenseCrimeHolder(binding)
+        } else {
+            val binding = ListItemCrimeBinding.inflate(inflater, parent, false)
+            return CrimeHolder(binding)
+        }
     }
 
     override fun getItemCount(): Int = crimes.size
 
-    override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val crime = crimes[position]
-
-        holder.bind(crime)
+        if (getItemViewType(position) == 1) {
+            (holder as IntenseCrimeHolder).bind(crime)
+        }
+        else {
+            (holder as CrimeHolder).bind(crime)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return super.getItemViewType(position)
+        val crime = crimes[position]
+
+        return when (crime.requiresPolice) {
+            true -> IS_INTENSE_CRIME
+            else -> IS_NORMAL_CRIME
+        }
     }
 
     companion object {
-        val IS_INTENSE_CRIME = 1
-        val IS_NORMAL_CRIME = 0
+        const val IS_INTENSE_CRIME = 1
+        const val IS_NORMAL_CRIME = 0
     }
 }
