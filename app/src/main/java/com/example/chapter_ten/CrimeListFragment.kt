@@ -14,7 +14,7 @@ private const val TAG = "CrimeListFragment"
 
 class CrimeListFragment : Fragment() {
 
-    private var _binding: FragmentCrimeListBinding? = null
+    private var _binding : FragmentCrimeListBinding? = null
     private val binding
         get() = checkNotNull(_binding) {
             "Cannot access binding because it is null. Is the view visible?"
@@ -26,7 +26,6 @@ class CrimeListFragment : Fragment() {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "Total crimes: ${crimeListViewModel.crimes.size}")
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -41,7 +40,6 @@ class CrimeListFragment : Fragment() {
         binding.crimeRecyclerView.adapter = adapter
 
         return binding.root
-
     }
 
     override fun onDestroyView() {
